@@ -69,7 +69,7 @@ In the steps below, "ClientID" is the same as "Application ID" or "AppId".
    and then adjust `app_config.py` to pick it up.
 4. Find the app key `<<Enter_the_Application_Id_here>>` and replace the existing value with the application ID (clientId) of the `python-webapp` application copied from the Azure portal.
 5. Find the app key `<<Enter_the_Application_Id_here>>` and replace the existing value with the application ID (clientId) of the `python-webapp` application copied from the Azure portal.
-6. Find the app key `<<Enter_logical_SQL_server_URL_here>>` and replace the existing value with the SQL server name created in step 4. Subsequently, change the app key `<<Enter_SQL_database_name_here>>` with the database name.
+6. Find the app key `<<Enter_logical_SQL_server_URL_here>>` and replace the existing value with the SQL server name created in step 3. Subsequently, change the app key `<<Enter_SQL_database_name_here>>` with the database name.
 
 ### Step 5: Run the sample
 
