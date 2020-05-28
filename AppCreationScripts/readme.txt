@@ -1,0 +1,1 @@
+See https://github.com/Azure-Samples/ms-identity-python-webapp/tree/master/AppCreationScripts

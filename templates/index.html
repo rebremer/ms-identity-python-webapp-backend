@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <h1>Microsoft Identity Python Web App. <h1>
+    <h2>Use URL localhost:5000 instead of 127.0.0.1:5000 since app registration reply URL contains localhost</h2>
+    <h2>Welcome {{ user.get("name") }}!</h2>
+
+    {% if config.get("ENDPOINT") %}
+      <li><a href='/databasecall'>Get data from Database</a></li>
+    {% endif %}
+
+    {% if config.get("B2C_PROFILE_AUTHORITY") %}
+      <li><a href='{{_build_auth_url(authority=config["B2C_PROFILE_AUTHORITY"])}}'>Edit Profile</a></li>
+    {% endif %}
+
+    <li><a href="/logout">Logout</a></li>
+    <hr>
+    <footer style="text-align: right">Powered by MSAL Python {{ version }}</footer>
+</body>
+</html>
+
