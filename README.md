@@ -1,17 +1,8 @@
----
-page_type: sample
-languages:
-- python
-products:
-- azure-active-directory
-description: "This sample demonstrates a Python web application calling a Azure SQLDB that is secured using Azure Active Directory. AAD pass through is used to authenticate against Azure SQL"
-urlFragment: ms-identity-python-webapp-sqldb
----
-# Integrating Microsoft Identity Platform with a Python web application
+## Python web application using AAD passthrough to authenticate against Azure SQL
 
 ## About this sample
 
-> This sample is derivated from [this quickstart]("https://github.com/Azure-Samples/ms-identity-python-webapp") in which user data is retrieved from Microsoft Graph
+This sample is derivated from [this quickstart]("https://github.com/Azure-Samples/ms-identity-python-webapp") in which user data is retrieved from Microsoft Graph
 
 ### Overview
 
