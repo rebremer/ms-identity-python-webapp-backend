@@ -2,7 +2,7 @@
 
 ## About this sample
 
-This sample is derivated from [this quickstart]("https://github.com/Azure-Samples/ms-identity-python-webapp") in which user data is retrieved from Microsoft Graph
+This sample is derivated from https://github.com/Azure-Samples/ms-identity-python-webapp, in which user data is retrieved from Microsoft Graph.
 
 ### Overview
 
