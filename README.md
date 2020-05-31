@@ -6,41 +6,43 @@ This sample is derived from https://github.com/Azure-Samples/ms-identity-python-
 
 ### Overview
 
-This sample demonstrates a Python web application that signs-in users with the Microsoft identity platform and calls an Azure SQL Database.
+This sample demonstrates a Python web application that signs-in users with the Microsoft identity platform and calls an Azure SQL Database. The following steps are executed
 
-1. The python web application uses the Microsoft Authentication Library (MSAL) to obtain a JWT access token from the Microsoft identity platform (formerly Azure AD v2.0):
-2. The access token is used as a bearer token to authenticate the user when calling the Azure SQL Database.
+1. User logs in and the python web application uses the Microsoft Authentication Library (MSAL) to obtain a JWT access token from Azure AD
+2. User call a REST API to fetch data using token 
+3. Web app matches the claims in the token with required roles to verify if user is allowed to retrieve data
+4. Web app authenticate to the database. Two scenarios are supported in this web app as follows:
+   - Scenario a. AAD User Passthrough: The access token is used as a bearer token to authenticate the user when calling the Azure SQL Database.
+   - Scenario b. AAD Application Identity: The Identity of the application is used to create bearer token and to authenticate to the database
 
-![Overview](./ReadmeFiles/topology.png)
+![Overview](./ReadmeFiles/architecture_v1.png)
 
-### Scenario
+In the remaining of this blog, the following steps are executed:
+- Step 1: Acquire token and call api using token
+- Step 2: Verify claims in token
+- Step 3a: AAD Application Identity authentication
+- Step 3b: AAD User passthrough authentication
+
+### Step 1: Acquire token and call api using token
 
 This sample shows how to build a Python web app using Flask and MSAL Python,
-that signs in a user, and get access to Azure SQL Database.
-For more information about how the protocols work in this scenario and other scenarios,
-see [Authentication Scenarios for Azure AD](https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-authentication-scenarios).
+that signs in a user, and get access to Azure SQL Database. For more information about how the protocols work in this scenario and other scenarios, see [Authentication Scenarios for Azure AD](https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-authentication-scenarios). In this step, the following sub steps are executed
 
-## How to run this sample
+- 1a. Preliminaries
+- 1b. Create and configure app registration
+- 1c. Create and configure Azure SQL database
+- 1d. Configure the pythonwebapp project
+- 1e. Run the sample
+
+#### 1a. Preliminaries
 
 To run this sample, you'll need:
 
-> - [Python 2.7+](https://www.python.org/downloads/release/python-2713/) or [Python 3+](https://www.python.org/downloads/release/python-364/)
-> - An Azure Active Directory (Azure AD) tenant. For more information on how to get an Azure AD tenant, see [how to get an Azure AD tenant.](https://docs.microsoft.com/azure/active-directory/develop/quickstart-create-new-tenant)
+- [Python 2.7+](https://www.python.org/downloads/release/python-2713/) or [Python 3+](https://www.python.org/downloads/release/python-364/)
+- An Azure Active Directory (Azure AD) tenant. For more information on how to get an Azure AD tenant, see [how to get an Azure AD tenant.](https://docs.microsoft.com/azure/active-directory/develop/quickstart-create-new-tenant)
+- Git to clone the following project: git clone https://github.com/rebremer/ms-identity-python-webapp-sqldb.git or download and extract the repository .zip file.
 
-
-### Step 1:  Clone or download this repository
-
-From your shell or command line:
-
-```Shell
-git clone https://github.com/rebremer/ms-identity-python-webapp-sqldb.git
-```
-
-or download and extract the repository .zip file.
-
-> Given that the name of the sample is quite long, you might want to clone it in a folder close to the root of your hard drive, to avoid file name length limitations when running on Windows.
-
-### Step 2:  Register the sample application with your Azure Active Directory tenant
+#### 1b. Create and configure app registration
 
 Create and configure an app registration as follows:
 
@@ -49,18 +51,14 @@ Create and configure an app registration as follows:
 - Use `http://localhost:5000/getAToken` as reply URL. In case you did not do this during creation, it can be added using the **Authentication** tab of the app registration
 - Go to **Certificates & Secrets** to create a secret. Copy the client_id and client secret
 
-### Step 3:  Create an Azure SQL DB
+#### 1c:  Create an Azure SQL DB
 
 - Create an Azure SQL DB using this [link](https://docs.microsoft.com/en-us/azure/azure-sql/database/single-database-create-quickstart?tabs=azure-portal#create-a-single-database)
 - Once the database is created, add Azure AD users and give a reader role using the following two statements:
   - `CREATE USER [<<AAD user email address>>] FROM EXTERNAL PROVIDER; `                      
   - `EXEC sp_addrolemember [db_datareader], [<<AAD user email address>>]; `
 
-### Step 4:  Configure the sample to use your Azure AD tenant
-
-In the steps below, "ClientID" is the same as "Application ID" or "AppId".
-
-#### Configure the pythonwebapp project
+#### 1d: Configure the pythonwebapp project
 
 1. Open the `app_config.py` file
 2. Find the app key `<<Enter_the_Tenant_Name_Here>>` and replace the existing value with your Azure AD tenant name.
@@ -71,7 +69,7 @@ In the steps below, "ClientID" is the same as "Application ID" or "AppId".
 5. Find the app key `<<Enter_the_Application_Id_here>>` and replace the existing value with the application ID (clientId) of the `python-webapp` application copied from the Azure portal.
 6. Find the app key `<<Enter_logical_SQL_server_URL_here>>` and replace the existing value with the SQL server name created in step 3. Subsequently, change the app key `<<Enter_SQL_database_name_here>>` with the database name.
 
-### Step 5: Run the sample
+#### Step 1e: Run the sample
 
 - You will need to install dependencies using pip as follows:
 ```Shell
@@ -82,6 +80,12 @@ Run app.py from shell or command line. Note that the port needs to match what yo
 ```Shell
 $ flask run --port 5000
 ```
+
+## Todo
+
+- Step 2: Verify claims in token
+- Step 3a: AAD Application Identity authentication
+- Step 3b: AAD User passthrough authentication
 
 ## More information
 
