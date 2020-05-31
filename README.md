@@ -8,8 +8,8 @@ This sample demonstrates a Python web application that signs-in users with the M
 - 1b: User calls a REST API to fetch data using token 
 - 2: Web app matches the claims in the token with required roles to verify if user is allowed to retrieve data
 - 3: Web app authenticate to the database. Two scenarios are supported in this web app as follows:
-  - a. AAD Application Identity: The Identity of the application is used to create bearer token and to authenticate to the Azure SQL
-  - b. AAD User Passthrough: The Identity of the user is used as AAD passthrough bearer token to authenticate to Azure SQL
+  - a. AAD Application Identity: Application identity is used to create a bearer token to authenticate to the Azure SQL
+  - b. AAD User Passthrough: User identity is used as AAD passthrough bearer token to authenticate to Azure SQL
 
 See also architecture below.
 
