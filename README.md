@@ -52,7 +52,7 @@ Create and configure an app registration as follows:
 
 #### 1.3: Create an Azure SQL DB
 
-- Create an Azure SQL DB using this [link](https://docs.microsoft.com/en-us/azure/azure-sql/database/single-database-create-quickstart?tabs=azure-portal#create-a-single-database)
+- Create an Azure SQL DB using this [link](https://docs.microsoft.com/en-us/azure/azure-sql/database/single-database-create-quickstart?tabs=azure-portal#create-a-single-database). Make sure that AdvertureWorks is installed as sample database, the cheapest database can be selected (SKU basic)
 
 #### 1.4: Configure the pythonwebapp project
 
