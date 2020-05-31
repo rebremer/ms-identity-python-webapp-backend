@@ -88,11 +88,11 @@ In this step, the claims in the tokens can be set. The following sub steps are e
 
 #### 2.1: Set configuration in app config
 
-Claim verification is an optional step and can be disabled using the following setting
+Claim verification is an optional step and can be enabled using the following setting
 in `app_config.py` file
 
 ```Python
-AAD_ROLE_CHECK = False
+AAD_ROLE_CHECK = True
 ```
 
 #### 2.2: Add roles to manifest
