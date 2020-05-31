@@ -2,11 +2,7 @@
 
 ### Overview
 
-This sample demonstrates a Python web application that signs-in users with the Microsoft identity platform and calls an Azure SQL Database. Token claims are used to verify if users has correct role to access data. The web app supports both AAD Application Identity and AAD User passthrough to access the database, see also overview below.
-
-![Overview](./ReadmeFiles/architecture_v1.png)
-
-The following steps are executed
+This sample demonstrates a Python web application that signs-in users with the Microsoft identity platform and retrieves data from an Azure SQL Database. Use case is described as follows.
 
 - 1a: User logs in and the python web application and obtains a JWT access token from Azure AD
 - 1b: User call a REST API to fetch data using token 
@@ -14,6 +10,8 @@ The following steps are executed
 - 3: Web app authenticate to the database. Two scenarios are supported in this web app as follows:
   - Scenario a. AAD Application Identity: The Identity of the application is used to create bearer token and to authenticate to the database
   - Scenario b. AAD User Passthrough: The access token is used as a bearer token to authenticate the user when calling the Azure SQL Database.
+
+![Overview](./ReadmeFiles/architecture_v1.png)
 
 In the remaining of this blog, the following steps are executed:
 - Step 1: Acquire token and call api using token
