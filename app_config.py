@@ -51,7 +51,7 @@ SCOPE = ["https://database.windows.net//.default"]
 # Notice that user shall also be added to the database as externa user and be granted the correct roles to retrieve data from tables
 AAD_ROLE_CHECK = False
 # Do no change settings below, also when role check is set false
-ROLES_CONFIG = {"customer": {"role": "UserReaders", "query": "select @@version"}, "product": {"role": "read_product", "query": "select @@version"}}
+ROLES_CONFIG = {"customer": {"role": "read_customer", "query": "SELECT top 10 * FROM SalesLT.Customer"}, "product": {"role": "read_product", "query": "SELECT top 10 * FROM SalesLT.Product"}}
 
 #
 # 3. DATABASE SETTINGS
