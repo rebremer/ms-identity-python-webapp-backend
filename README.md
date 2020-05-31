@@ -11,6 +11,8 @@ This sample demonstrates a Python web application that signs-in users with the M
   - Scenario a. AAD Application Identity: The Identity of the application is used to create bearer token and to authenticate to the database
   - Scenario b. AAD User Passthrough: The access token is used as a bearer token to authenticate the user when calling the Azure SQL Database.
 
+See also architecture below.
+
 ![Overview](./ReadmeFiles/architecture_v1.png)
 
 In the remaining of this blog, the following steps are executed:
@@ -163,7 +165,7 @@ Now the app can be run as described in step 1.5. When you click on the link `Get
 
 In this step, the identity of the app is used to retrieve data. However, the identity of the user can also passed (AAD passthrough) to retrieve data from the database. 
 
-### Step 3a: AAD Application Identity authentication
+### Step 3b: AAD User passthrough authentication
 
 In the step, the Identity of the user itself is used to retrieve data. The following sub steps are executed:
 
@@ -191,7 +193,7 @@ SCOPE = ["https://database.windows.net//.default"]
 
 #### 3b.2: Add Azure SQL DB Scope to app registration
 
-- Modify your app registration created in step 1.2. with permissions for Azure SQL database as delegated user. This is explained in this [link](https://docs.microsoft.com/en-us/azure/azure-sql/database/active-directory-interactive-connect-azure-sql-db#register-your-app-and-set-permissions) to create an app registration. Key is to add 
+- Modify your app registration created in step 1.2. with permissions for Azure SQL database as delegated user. This is explained in this [link](https://docs.microsoft.com/en-us/azure/azure-sql/database/active-directory-interactive-connect-azure-sql-db#register-your-app-and-set-permissions) 
 - Important: Admin consent is required for Azure SQL Database. This can be either done by selecting **Grant_admin consent for Default Directory** in the **permissions** tab or at runtime while logging in
 
 #### 3b.3: Add AAD user to database
@@ -201,9 +203,14 @@ SCOPE = ["https://database.windows.net//.default"]
   - `EXEC sp_addrolemember [db_datareader], [<<AAD user email address>>]; `
     -  (in case you want to be more granular in rolemembers in the database, `read_customer` reads data from SalesLT.Customer, whereas `read_product` reads data from SalesLT.Product)
 
-### Ready to go
 
-In this tutorial, 
+Now the app can be run as described in step 1.5, in which data can be retrieved from the database using the identity of the logged in user.
+
+## Conclusion
+
+In this github project, a Python web application is created that retrieves data from SQLDB. Users claims, AAD Managed Identites and/or AAD passthrough can be used to authenticate and authorize users to retrieve data, see also overview below.
+
+![Overview](./ReadmeFiles/architecture_v1.png)
 
 ## More information
 
