@@ -6,6 +6,8 @@ import msal
 import app_config
 import pyodbc
 import struct
+import adal
+from msrestazure.azure_active_directory import AADTokenCredentials
 
 app = Flask(__name__)
 app.config.from_object(app_config)
@@ -57,31 +59,13 @@ def logout():
         app_config.AUTHORITY + "/oauth2/v2.0/logout" +
         "?post_logout_redirect_uri=" + url_for("index", _external=True))
 
-@app.route("/databasecall")
-def graphcall():
-    token = _get_token_from_cache(app_config.SCOPE)
-    if not token:
-        return redirect(url_for("login"))
-    
-    accessToken = bytes(token['access_token'], 'utf-8')
-    exptoken = b""
-    for i in accessToken:
-        exptoken += bytes({i})
-        exptoken += bytes(1)
-    tokenstruct = struct.pack("=i", len(exptoken)) + exptoken
+@app.route("/getcustomerdata")
+def get_customer_data():
+    return _get_data(app_config.ROLES_CONFIG.get("customer"))
 
-    server  = app_config.SQL_SERVER
-    database = app_config.DATABASE
-    connstr = 'DRIVER={ODBC Driver 17 for SQL Server};SERVER='+server+';DATABASE='+database
-    #tokenstruct = struct.pack("=i", len(exptoken)) + exptoken
-    conn = pyodbc.connect(connstr, attrs_before = { 1256:tokenstruct })
-    
-    cursor = conn.cursor()
-    cursor.execute("select @@version")
-    row = cursor.fetchall()
-        
-    return render_template('display.html', result={'rene': "'" + str(row) + "'"})
-
+@app.route("/getproductdata")
+def get_product_data():
+    return _get_data(app_config.ROLES_CONFIG.get("product"))
 
 def _load_cache():
     cache = msal.SerializableTokenCache()
@@ -115,6 +99,74 @@ def _get_token_from_cache(scope=None):
 
 app.jinja_env.globals.update(_build_auth_url=_build_auth_url)  # Used in template
 
+#
+# New code compared to original ms-identity-python-webapp to access the database
+#
+def _get_data(role_config):
+
+    token = _get_token_from_cache(app_config.SCOPE)
+    if not token:
+        return redirect(url_for("login"))
+
+    if app_config.AAD_ROLE_CHECK:
+        # check if claims in bearer token of user allows to retrieve data
+        if _check_user_has_role_in_token(role_config["role"]) == False:
+            error_message = "role " + role_config["role"] + " not present in id token of user"
+            return render_template('display.html', result={'message': "'" + error_message + "'"})
+
+    if app_config.DATABASE_AUTHENTICATION == "AAD_APPLICATION_MI":
+        # create new bearer token based on MI of app registration
+        token = _create_token_from_app_registration()
+    else:
+        # use bearer token of user for AAD passthrough
+        token = token['access_token']
+
+    # Retrieve data from database and return it
+    row = _retrieve_data_from_database(token, role_config.get("query"))
+    return render_template('display.html', result={'message': "'" + str(row) + "'"})
+
+def _check_user_has_role_in_token(role):
+    # Check if required user role is present as claim in the ID token of the user
+    user_roles = session["user"]["roles"]
+    for user_role in user_roles:
+        print (user_role)
+        if user_role == role:
+            return True
+    return False
+
+def _create_token_from_app_registration():
+    # Authenticate using service principal w/ key.
+    #
+    # To do, use MSAL libraries, put config in appconfig
+    #
+    authority_uri = app_config.AUTHORITY
+    resource_uri = 'https://database.windows.net/'
+    client_id = app_config.CLIENT_ID
+    client_secret = app_config.CLIENT_SECRET
+
+    context = adal.AuthenticationContext(authority_uri, api_version=None)
+    mgmt_token = context.acquire_token_with_client_credentials(resource_uri, client_id, client_secret)
+
+    return mgmt_token["accessToken"]
+
+def _retrieve_data_from_database(token, query):
+    accessToken = bytes(token, 'utf-8')
+    exptoken = b""
+    for i in accessToken:
+        exptoken += bytes({i})
+        exptoken += bytes(1)
+    tokenstruct = struct.pack("=i", len(exptoken)) + exptoken
+
+    server  = app_config.SQL_SERVER
+    database = app_config.DATABASE
+    connstr = 'DRIVER={ODBC Driver 17 for SQL Server};SERVER='+server+';DATABASE='+database
+    #tokenstruct = struct.pack("=i", len(exptoken)) + exptoken
+    conn = pyodbc.connect(connstr, attrs_before = { 1256:tokenstruct })
+    
+    cursor = conn.cursor()
+    cursor.execute(query)
+    row = cursor.fetchall()
+    return row
+
 if __name__ == "__main__":
     app.run()
-

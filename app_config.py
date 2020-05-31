@@ -20,10 +20,41 @@ REDIRECT_PATH = "/getAToken"  # It will be used to form an absolute URL
 # https://developer.microsoft.com/en-us/graph/graph-explorer
 ENDPOINT = 'https://graph.microsoft.com/v1.0/users'  # This resource requires no admin consent
 
-# Add
-SCOPE = ["https://database.windows.net//.default"]
+# You can find the proper permission names from this document
+# https://docs.microsoft.com/en-us/graph/permissions-reference
 
 SESSION_TYPE = "filesystem"  # So token cache will be stored in server-side session
 
-SQL_SERVER = "<<Enter_logical_SQL_server_URL_here>>"
-DATABASE = "<<Enter_SQL_database_name_here>>" # Database name
+#
+# New settings compared to original ms-identity-python-webapp to access the database
+#
+# 1. DATABASE_AUTHENTICATION
+#
+# Option 1a. AAD_USER_PASSTHROUGH
+#
+# In case DATABASE_AUTHENTICATION = "AAD_USER_PASSTHROUGH", the user bearer token is used to authenticate to the database.
+# SCOPE https://database.windows.net//.default is required, see below. Caution: this scope likely requirems admin consent
+DATABASE_AUTHENTICATION = "AAD_USER_PASSTHROUGH"
+SCOPE = ["https://database.windows.net//.default"]
+#
+# Option 1b. AAD_APPLICATION_MI
+#
+# In case DATABASE_AUTHENTICATION = "AAD_APPLICATION_MI", the MI of the application is used to create bearer token and to authenticate to the database.
+# SCOPE can be empty, no admin consent requirement
+#DATABASE_AUTHENTICATION = "AAD_APPLICATION_MI"
+#SCOPE = []
+
+#
+# 2. AAD_ROLE_CHECK
+#
+# In case AAD Role check is true, the user claimes in the id token are used to verify if user is allowed to retrieve data
+# Notice that user shall also be added to the database as externa user and be granted the correct roles to retrieve data from tables
+AAD_ROLE_CHECK = False
+# Do no change settings below, also when role check is set false
+ROLES_CONFIG = {"customer": {"role": "UserReaders", "query": "select @@version"}, "product": {"role": "read_product", "query": "select @@version"}}
+
+#
+# 3. DATABASE SETTINGS
+#
+SQL_SERVER = "<<Enter_logical_SQL_server_URL_here>>" # Logical DB server name
+DATABASE = "<<Enter_SQL_database_name_here>>"

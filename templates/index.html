@@ -9,7 +9,11 @@
     <h2>Welcome {{ user.get("name") }}!</h2>
 
     {% if config.get("ENDPOINT") %}
-      <li><a href='/databasecall'>Get data from Database</a></li>
+      <li><a href='/getcustomerdata'>Get Customer data from Database</a></li>
+    {% endif %}
+
+    {% if config.get("ENDPOINT") %}
+      <li><a href='/getproductdata'>Get Product data from Database</a></li>
     {% endif %}
 
     {% if config.get("B2C_PROFILE_AUTHORITY") %}
