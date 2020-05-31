@@ -64,7 +64,7 @@ Create and configure an app registration as follows:
 4. Find the app key `<<Enter_the_Application_Id_here>>` and replace the existing value with the application ID (clientId) of the `python-webapp` application copied from the Azure portal.
 5. Find the app key `<<Enter_logical_SQL_server_URL_here>>` and replace the existing value with the SQL server name created in step 3. Subsequently, change the app key `<<Enter_SQL_database_name_here>>` with the database name.
 
-#### Step 1.5: Run the sample
+#### 1.5: Run the sample
 
 - You will need to install dependencies using pip as follows:
 ```Shell
