@@ -5,7 +5,12 @@
 </head>
 <body>
     <a href="javascript:window.history.go(-1)">Back</a> <!-- Displayed on top of a potentially large JSON response, so it will remain visible -->
-    <h1>Retrieve data from database</h1>
+    {% if config.get("BACKEND_SETTINGS").get("Type") == "Database" %}
+      <h1>Retrieve data from database</h1>
+    {% endif %}
+    {% if config.get("BACKEND_SETTINGS").get("Type") == "AzureFunction" %}
+        <h1>Retrieve data from Azure Function</h1>
+    {% endif %}
     <pre>{{ result |tojson(indent=4) }}</pre> <!-- Just a generic json viewer -->
 </body>
 </html>

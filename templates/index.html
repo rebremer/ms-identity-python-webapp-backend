@@ -8,16 +8,26 @@
     <h2>Use URL localhost:5000 instead of 127.0.0.1:5000 since app registration reply URL contains localhost</h2>
     <h2>Welcome {{ user.get("name") }}!</h2>
 
-    {% if config.get("ENDPOINT") %}
-      <li><a href='/getcustomerdata'>Get Customer data from Database</a></li>
-    {% endif %}
-
-    {% if config.get("ENDPOINT") %}
+    {% if config.get("BACKEND_SETTINGS").get("Type") == "Database" %}
+      <li><a href='/graphcall'>Call Microsoft Graph API</a></li>
+    {% endif %}    
+    {% if config.get("BACKEND_SETTINGS").get("Type") == "Database" %}
+      {% if config.get("AAD_ROLE_CHECK") %}
+        <li><a href='/getcustomerdata'>(Premium users only) Get Customer data from Database</a></li>
+      {% endif %}
+      {% if config.get("AAD_ROLE_CHECK") == 0 %}
+        <li><a href='/getcustomerdata'>Get Customer data from Database</a></li>
+      {% endif %}
       <li><a href='/getproductdata'>Get Product data from Database</a></li>
     {% endif %}
-
-    {% if config.get("B2C_PROFILE_AUTHORITY") %}
-      <li><a href='{{_build_auth_url(authority=config["B2C_PROFILE_AUTHORITY"])}}'>Edit Profile</a></li>
+    {% if config.get("BACKEND_SETTINGS").get("Type") == "AzureFunction" %}
+      {% if config.get("AAD_ROLE_CHECK") %}
+        <li><a href='/getcustomerdata'>(Premium users only) Get Customer data from AzureFunction</a></li>
+      {% endif %}
+      {% if config.get("AAD_ROLE_CHECK") == 0 %}      
+        <li><a href='/getcustomerdata'>Get Customer data from AzureFunction</a></li>
+      {% endif %}
+      <li><a href='/getproductdata'>Get Product from AzureFunction</a></li>
     {% endif %}
 
     <li><a href="/logout">Logout</a></li>
