@@ -1,5 +1,7 @@
 ## Python web application using Azure AD to authenticate against Azure SQL
 
+- Detailed documentation can be found in my blog: https://towardsdatascience.com/how-to-secure-python-flask-web-apis-with-azure-ad-14b46b8abf22
+
 ### Overview
 
 This sample demonstrates a Python web application that signs-in users with the Microsoft identity platform and retrieves data from an Azure SQL Database. Use case is described as follows.
