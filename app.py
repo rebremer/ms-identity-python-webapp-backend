@@ -75,7 +75,7 @@ def get_product_data_daemon():
         app_config.CLIENT_ID, authority=app_config.AUTHORITY,
         client_credential=app_config.CLIENT_SECRET
     )
-    result = app2.acquire_token_for_client(scopes=app_config.APPLICATION_PERMISSONS)
+    result = app2.acquire_token_for_client(scopes=app_config.APPLICATION_PERMISSIONS)
     token = result['access_token']
 
     if app_config.BACKEND_SETTINGS.get("Type") == "Database":
