@@ -46,6 +46,7 @@ BACKEND_SETTINGS = {"Type": "Database", "Connection":{"SQL_SERVER": "<<Enter_log
 # https://docs.microsoft.com/en-us/azure/active-directory/develop/developer-glossary#permissions
 #
 # Option 3a. Delegated user is used to authenticate to Graph API, MI is then used to authenticate to backend
+# Backend can either be database (2a) or Azure Function (2b)
 DELEGATED_PERMISSONS = ["User.Read"]
 if BACKEND_SETTINGS.get("Type") == "AzureFunction":
     APPLICATION_PERMISSIONS = [BACKEND_SETTINGS.get("Connection").get("URL").split('.net/')[0] + ".net/.default"]
@@ -53,6 +54,7 @@ else:
     APPLICATION_PERMISSIONS = ["https://database.windows.net//.default"]
 
 # Option 3b. Delegated user is used to authenticate to backend, graph API disabled
+# Backend can either be database (2a) or Azure Function (2b)
 #if BACKEND_SETTINGS.get("Type") == "AzureFunction":
 #    DELEGATED_PERMISSONS = [BACKEND_SETTINGS.get("Connection").get("URL").split('.net/')[0] + ".net/user_impersonation"]
 #else:
